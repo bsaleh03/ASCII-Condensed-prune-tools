@@ -11,7 +11,7 @@ from collections import defaultdict
 from gguf import GGUFReader
 
 sys.path.insert(0, __file__.rsplit("\\", 1)[0].rsplit("/", 1)[0])
-from vocab_audit import bytes_to_unicode
+from vocab_audit import bytes_to_unicode, utf8_console
 from prune_vocab import P1M_EXTRA
 
 U2B = {v: k for k, v in bytes_to_unicode().items()}
@@ -35,6 +35,7 @@ CATEGORIES = [
 
 
 def main(path):
+    utf8_console()
     r = GGUFReader(path)
     fld = r.fields["tokenizer.ggml.tokens"]
     n = len(fld.data)

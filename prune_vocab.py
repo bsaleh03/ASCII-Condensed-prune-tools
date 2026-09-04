@@ -27,7 +27,7 @@ from gguf import GGUFReader, GGUFWriter, GGUFValueType
 from gguf.constants import GGML_QUANT_SIZES
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from vocab_audit import bytes_to_unicode
+from vocab_audit import bytes_to_unicode, utf8_console
 
 B2U = bytes_to_unicode()
 U2B = {v: k for k, v in B2U.items()}
@@ -153,6 +153,7 @@ def build_keep(pieces, ttypes, policy, keep_chars="", drop_chars=""):
 
 
 def main():
+    utf8_console()
     ap = argparse.ArgumentParser()
     ap.add_argument("src")
     ap.add_argument("dst")

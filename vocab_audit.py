@@ -12,6 +12,23 @@ except ImportError:
     re2 = None
 
 
+def utf8_console():
+    """Make stdout/stderr able to carry the characters these tools discuss.
+
+    The Windows console defaults to cp1252, so printing a Greek or math glyph
+    raised UnicodeEncodeError and killed the run - fatal for tools whose whole
+    output is non-ASCII characters. errors="replace" so an exotic console
+    encoding degrades to '?' rather than aborting.
+
+    Lives here because vocab_audit is the base module the others import.
+    """
+    for s in (sys.stdout, sys.stderr):
+        try:
+            s.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError, OSError):
+            pass  # not a real stream (pipe, pytest capture) - nothing to fix
+
+
 def bytes_to_unicode():
     """The GPT-2 map, verbatim."""
     bs = (list(range(ord("!"), ord("~") + 1))
@@ -121,6 +138,7 @@ def classify(raw: bytes, piece: str):
 
 
 def main(path, out_json):
+    utf8_console()
     r = GGUFReader(path)
     fld = r.fields["tokenizer.ggml.tokens"]
     n = len(fld.data)
