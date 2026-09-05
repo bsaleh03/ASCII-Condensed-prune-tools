@@ -1,4 +1,4 @@
-# tools-prune
+# ASCII-Condensed Prune Tools
 
 Vocabulary pruning for byte-level BPE GGUF models.
 
